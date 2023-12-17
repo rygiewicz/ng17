@@ -1,7 +1,7 @@
 <form class="row" novalidate #f="ngForm" (ngSubmit)="onSubmit(f)">
   <div class="col">
     <label for="imdbSearch1" class="form-label">Search IMDB</label>
-    <input name="phrase" ngModel type="text" autocomplete="off" class="form-control" id="imdbSearch1">
+    <input name="phrase" [ngModel]="onSearch | async" type="text" autocomplete="off" class="form-control" id="imdbSearch1">
   </div>
   <div class="col-auto align-self-end">
     <button type="submit" class="btn btn-primary">Submit</button>
