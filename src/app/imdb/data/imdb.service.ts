@@ -12,9 +12,9 @@ import {
 } from 'rxjs';
 import {
   MovieListState,
-  MOVIES_EMPTY,
-  MOVIES_ERROR,
-  MOVIES_LOADING,
+  MOVIES_EMPTY$,
+  MOVIES_ERROR$,
+  MOVIES_LOADING$,
   MOVIES_SUCCESS,
 } from './imdb.model';
 import { adaptMovieList } from './imdb.adapter';
@@ -36,10 +36,10 @@ export class ImdbService {
       distinctUntilChanged(),
       switchMap((phrase) => {
         if (phrase.length < 3) {
-          return MOVIES_EMPTY;
+          return MOVIES_EMPTY$;
         }
 
-        return concat(MOVIES_LOADING, this.fetchMovies(phrase));
+        return concat(MOVIES_LOADING$, this.fetchMovies(phrase));
       })
     );
   }
@@ -61,7 +61,7 @@ export class ImdbService {
           return MOVIES_SUCCESS(adaptMovieList(response));
         }),
         catchError((err) => {
-          return MOVIES_ERROR(err.message);
+          return MOVIES_ERROR$(err.message);
         })
       );
   }

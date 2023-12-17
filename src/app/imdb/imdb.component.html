@@ -2,7 +2,5 @@
   <app-search (onSearch)="onSearch($event)" />
 </div>
 <div class="container my-4" *ngIf="imdbService.getMovies$() | async as movies">
-  <app-spinner *ngIf="movies.loading" />
-  <app-error *ngIf="movies.error" [message]="movies.error" />
-  <div *ngIf="movies.data.length">{{JSON.stringify(movies.data)}}</div>
+  <app-movies [movies]="movies" />
 </div>

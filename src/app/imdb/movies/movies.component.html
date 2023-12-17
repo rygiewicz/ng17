@@ -1,0 +1,3 @@
+<app-spinner *ngIf="movies.loading" />
+<app-error *ngIf="movies.error" [message]="movies.error" />
+<div *ngIf="movies.data.length">{{JSON.stringify(movies.data)}}</div>
