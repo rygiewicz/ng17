@@ -16,6 +16,23 @@ function adaptMovie(data: any): Movie {
   return {
     id: String(data.id || ''),
     title: String(data.title || ''),
-    description: `${data.titleType || ''} (${data.year || ''})`,
+    description: adaptDescription(data),
+    imageUrl: adaptImageUrl(data),
   };
+}
+
+function adaptDescription(data: any): string {
+  data = data || {};
+
+  return `${data.titleType || ''} (${data.year || ''})`;
+}
+
+function adaptImageUrl(data: any): string {
+  data = data || {};
+
+  if (!data.image) {
+    return '';
+  }
+
+  return String(data.image.url || '');
 }
