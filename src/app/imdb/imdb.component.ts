@@ -12,7 +12,9 @@ import { MoviesComponent } from './movies/movies.component';
   styleUrl: './imdb.component.scss',
 })
 export class ImdbComponent {
-  constructor(public imdbService: ImdbService) {}
+  movieList$ = this.imdbService.getMovieList$();
+
+  constructor(private imdbService: ImdbService) {}
 
   onSearch(phrase: string) {
     this.imdbService.setPhrase(phrase);

@@ -7,25 +7,25 @@ export interface Movie {
   imageUrl: string;
 }
 
-export interface RequestState<T = any> {
+export interface RequestState<T> {
   error?: string;
   data?: T;
   loading: boolean;
 }
 
-export function EMPTY(): RequestState {
+export function EMPTY(): RequestState<any> {
   return {
     loading: false,
   };
 }
 
-export function LOADING(): RequestState {
+export function LOADING(): RequestState<any> {
   return {
     loading: true,
   };
 }
 
-export function ERROR(error: string): RequestState {
+export function ERROR(error: string): RequestState<any> {
   return {
     error,
     loading: false,
@@ -39,15 +39,15 @@ export function SUCCESS<T>(data: T): RequestState<T> {
   };
 }
 
-export function EMPTY$(): Observable<RequestState> {
+export function EMPTY$(): Observable<RequestState<any>> {
   return of(EMPTY());
 }
 
-export function LOADING$(): Observable<RequestState> {
+export function LOADING$(): Observable<RequestState<any>> {
   return of(LOADING());
 }
 
-export function ERROR$(error: string): Observable<RequestState> {
+export function ERROR$(error: string): Observable<RequestState<any>> {
   return of(ERROR(error));
 }
 

@@ -1,6 +1,6 @@
 <app-spinner *ngIf="movies.loading" />
 <app-error *ngIf="movies.error" [message]="movies.error" />
-<div *ngIf="movies.data.length" class="row row-cols-4 g-4">
+<div *ngIf="movies.data" class="row row-cols-4 g-4">
   <div class="col" *ngFor="let movie of movies.data; trackBy: trackMovies">
     <div class="card h-100">
       <img *ngIf="movie.imageUrl; else imgFallback" [src]="movie.imageUrl" class="card-img-top" [alt]="movie.title">
