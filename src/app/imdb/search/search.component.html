@@ -1,8 +1,13 @@
 <form class="row" novalidate #f="ngForm" (ngSubmit)="onFormSubmit(f)">
   <div class="col">
     <label for="imdbSearch1" class="form-label">Search IMDB</label>
-    <input name="phrase" [ngModel]="onSubmit | async" (ngModelChange)="onChange.emit($event)" type="text"
-      autocomplete="off" class="form-control" id="imdbSearch1">
+    <div ngbDropdown>
+      <input name="phrase" [ngModel]="onSubmit | async" (ngModelChange)="onChange.emit($event)" type="text"
+        autocomplete="off" class="form-control" id="imdbSearch1" ngbDropdownToggle>
+      <div ngbDropdownMenu aria-labelledby="imdbSearch1" [ngClass]="{'d-none': !autocomplete.length}">
+        <button ngbDropdownItem *ngFor="let item of autocomplete">{{item.title}}</button>
+      </div>
+    </div>
   </div>
   <div class="col-auto align-self-end">
     <button type="submit" class="btn btn-primary">Submit</button>

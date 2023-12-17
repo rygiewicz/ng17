@@ -1,17 +1,20 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, map } from 'rxjs';
+import { AutocompleteItem } from './data/search.model';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [FormsModule, AsyncPipe],
+  imports: [FormsModule, AsyncPipe, NgbDropdownModule, NgIf, NgFor, NgClass],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
 export class SearchComponent {
+  @Input() autocomplete: AutocompleteItem[] = [];
   @Output() onSubmit: Observable<string>;
   @Output() onChange = new EventEmitter<string>();
 

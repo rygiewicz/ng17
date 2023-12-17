@@ -1,5 +1,6 @@
 <div class="container my-4">
-  <app-search (onSubmit)="onSearchSubmit($event)" (onChange)="onSearchChange($event)" />
+  <app-search (onSubmit)="onSearchSubmit($event)" (onChange)="onSearchChange($event)"
+    [autocomplete]="(autocompleteList$ | async) || []" />
 </div>
 <div class="container my-4" *ngIf="movieList$ | async as movies">
   <app-movies [movies]="movies" />

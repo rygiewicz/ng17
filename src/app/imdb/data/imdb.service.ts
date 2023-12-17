@@ -26,6 +26,7 @@ import {
   adaptMovieList,
 } from './imdb.adapter';
 import { imdbConfig } from './imdb.config';
+import { AutocompleteItem } from '../search/data/search.model';
 
 @Injectable({
   providedIn: 'root',
@@ -54,7 +55,7 @@ export class ImdbService {
     );
   }
 
-  private createAutocompleteList$(): Observable<Movie[]> {
+  private createAutocompleteList$(): Observable<AutocompleteItem[]> {
     return this.autocompletePhrase$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
@@ -117,7 +118,7 @@ export class ImdbService {
     );
   }
 
-  private fetchAutocomplete(phrase: string): Observable<Movie[]> {
+  private fetchAutocomplete(phrase: string): Observable<AutocompleteItem[]> {
     return this.http
       .get(`${this.baseUrl}/auto-complete`, {
         params: {
@@ -133,7 +134,7 @@ export class ImdbService {
       );
   }
 
-  getAutocompleteList$(): Observable<Movie[]> {
+  getAutocompleteList$(): Observable<AutocompleteItem[]> {
     return this.autocompleteList$;
   }
 

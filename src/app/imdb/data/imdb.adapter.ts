@@ -1,6 +1,7 @@
+import { AutocompleteItem } from '../search/data/search.model';
 import { Movie } from './imdb.model';
 
-export function adaptAutocomplete(data: any): Movie[] {
+export function adaptAutocomplete(data: any): AutocompleteItem[] {
   data = data || {};
 
   if (!Array.isArray(data.d)) {
@@ -10,15 +11,13 @@ export function adaptAutocomplete(data: any): Movie[] {
   return data.d.map(adaptAutocompleteItem);
 }
 
-function adaptAutocompleteItem(data: any): Movie {
+function adaptAutocompleteItem(data: any): AutocompleteItem {
   data = data || {};
 
   return {
     id: String(data.id || ''),
     title: String(data.l || ''),
     description: `${data.qid || ''} (${data.y || ''})`,
-    imageUrl: '',
-    synopsis: '',
   };
 }
 
