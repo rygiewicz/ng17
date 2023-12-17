@@ -52,7 +52,7 @@ export class ImdbService {
     );
   }
 
-  getMovieList(): Observable<MovieListState> {
+  getMovies$(): Observable<MovieListState> {
     return this.movieList$;
   }
 

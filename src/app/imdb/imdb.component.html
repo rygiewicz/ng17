@@ -9,6 +9,8 @@
     </div>
   </form>
 </div>
-<div class="container" *ngIf="imdbService.getMovieList() | async as movieList">
-  {{JSON.stringify(movieList)}}
+<div class="container" *ngIf="imdbService.getMovies$() | async as movies">
+  <app-spinner *ngIf="movies.loading" />
+  <app-error *ngIf="movies.error" [message]="movies.error" />
+  {{JSON.stringify(movies)}}
 </div>
