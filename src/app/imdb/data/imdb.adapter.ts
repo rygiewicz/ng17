@@ -1,5 +1,27 @@
 import { Movie } from './imdb.model';
 
+export function adaptAutocomplete(data: any): Movie[] {
+  data = data || {};
+
+  if (!Array.isArray(data.d)) {
+    return [];
+  }
+
+  return data.d.map(adaptAutocompleteItem);
+}
+
+function adaptAutocompleteItem(data: any): Movie {
+  data = data || {};
+
+  return {
+    id: String(data.id || ''),
+    title: String(data.l || ''),
+    description: `${data.qid || ''} (${data.y || ''})`,
+    imageUrl: '',
+    synopsis: '',
+  };
+}
+
 export function adaptMovieList(data: any): Movie[] {
   data = data || {};
 
@@ -10,7 +32,7 @@ export function adaptMovieList(data: any): Movie[] {
   return data.results.map(adaptMovie);
 }
 
-export function adaptMovie(data: any): Movie {
+function adaptMovie(data: any): Movie {
   data = data || {};
 
   return {

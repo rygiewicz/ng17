@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
@@ -12,10 +12,11 @@ import { Observable, map } from 'rxjs';
   styleUrl: './search.component.scss',
 })
 export class SearchComponent {
-  @Output() onSearch: Observable<string>;
+  @Output() onSubmit: Observable<string>;
+  @Output() onChange = new EventEmitter<string>();
 
   constructor(private router: Router, private activeRoute: ActivatedRoute) {
-    this.onSearch = this.activeRoute.queryParamMap.pipe(
+    this.onSubmit = this.activeRoute.queryParamMap.pipe(
       map((params) => {
         const value = params.get('p');
 
@@ -24,7 +25,7 @@ export class SearchComponent {
     );
   }
 
-  onSubmit(f: NgForm) {
+  onFormSubmit(f: NgForm) {
     const phrase = String(f.value.phrase || '');
 
     this.router.navigate([], { queryParams: { p: phrase } });

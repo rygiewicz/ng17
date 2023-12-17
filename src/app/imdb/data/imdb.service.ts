@@ -6,8 +6,10 @@ import {
   catchError,
   combineLatest,
   concat,
+  debounceTime,
   distinctUntilChanged,
   map,
+  of,
   switchMap,
 } from 'rxjs';
 import {
@@ -18,7 +20,11 @@ import {
   RequestState,
   SUCCESS,
 } from './imdb.model';
-import { adaptMovie, adaptMovieDetails, adaptMovieList } from './imdb.adapter';
+import {
+  adaptAutocomplete,
+  adaptMovieDetails,
+  adaptMovieList,
+} from './imdb.adapter';
 import { imdbConfig } from './imdb.config';
 
 @Injectable({
@@ -28,13 +34,15 @@ export class ImdbService {
   private baseUrl = imdbConfig.baseUrl;
   private apiKey = imdbConfig.apiKey;
 
-  private phrase$ = new BehaviorSubject('');
+  private searchPhrase$ = new BehaviorSubject('');
+  private autocompletePhrase$ = new BehaviorSubject('');
   private movieList$ = this.createMovieList$();
+  private autocompleteList$ = this.createAutocompleteList$();
 
   constructor(private http: HttpClient) {}
 
   private createMovieList$(): Observable<RequestState<Movie[]>> {
-    return this.phrase$.pipe(
+    return this.searchPhrase$.pipe(
       distinctUntilChanged(),
       switchMap((phrase) => {
         if (phrase.length < 3) {
@@ -43,6 +51,14 @@ export class ImdbService {
 
         return concat(LOADING$(), this.fetchMovieList(phrase));
       })
+    );
+  }
+
+  private createAutocompleteList$(): Observable<Movie[]> {
+    return this.autocompletePhrase$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((phrase) => this.fetchAutocomplete(phrase))
     );
   }
 
@@ -101,6 +117,26 @@ export class ImdbService {
     );
   }
 
+  private fetchAutocomplete(phrase: string): Observable<Movie[]> {
+    return this.http
+      .get(`${this.baseUrl}/auto-complete`, {
+        params: {
+          q: phrase,
+        },
+        headers: {
+          'X-RapidAPI-Key': this.apiKey,
+        },
+      })
+      .pipe(
+        map((response) => adaptAutocomplete(response)),
+        catchError(() => of([]))
+      );
+  }
+
+  getAutocompleteList$(): Observable<Movie[]> {
+    return this.autocompleteList$;
+  }
+
   getMovieList$(): Observable<RequestState<Movie[]>> {
     return this.movieList$;
   }
@@ -109,7 +145,11 @@ export class ImdbService {
     return concat(LOADING$(), this.fetchMovieDetailed(id));
   }
 
-  setPhrase(phrase: string) {
-    this.phrase$.next(phrase);
+  setSearchPhrase(phrase: string) {
+    this.searchPhrase$.next(phrase);
+  }
+
+  setAutocompletePhrase(phrase: string) {
+    this.autocompletePhrase$.next(phrase);
   }
 }
