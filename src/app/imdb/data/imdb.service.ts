@@ -4,6 +4,7 @@ import {
   BehaviorSubject,
   Observable,
   catchError,
+  combineLatest,
   concat,
   distinctUntilChanged,
   map,
@@ -17,7 +18,7 @@ import {
   RequestState,
   SUCCESS,
 } from './imdb.model';
-import { adaptMovie, adaptMovieList } from './imdb.adapter';
+import { adaptMovie, adaptMovieDetails, adaptMovieList } from './imdb.adapter';
 import { imdbConfig } from './imdb.config';
 
 @Injectable({
@@ -67,24 +68,37 @@ export class ImdbService {
       );
   }
 
-  private fetchMovie(id: string): Observable<RequestState<Movie>> {
-    return this.http
-      .get(`${this.baseUrl}/title/get-details`, {
-        params: {
-          tconst: id,
-        },
-        headers: {
-          'X-RapidAPI-Key': this.apiKey,
-        },
+  private fetchMovie(id: string) {
+    return this.http.get(`${this.baseUrl}/title/get-details`, {
+      params: {
+        tconst: id,
+      },
+      headers: {
+        'X-RapidAPI-Key': this.apiKey,
+      },
+    });
+  }
+
+  private fetchSynopsis(id: string) {
+    return this.http.get(`${this.baseUrl}/title/get-synopses`, {
+      params: {
+        tconst: id,
+      },
+      headers: {
+        'X-RapidAPI-Key': this.apiKey,
+      },
+    });
+  }
+
+  private fetchMovieDetailed(id: string): Observable<RequestState<Movie>> {
+    return combineLatest([this.fetchMovie(id), this.fetchSynopsis(id)]).pipe(
+      map(([movieResponse, synopsisResponse]) => {
+        return SUCCESS(adaptMovieDetails(movieResponse, synopsisResponse));
+      }),
+      catchError((err) => {
+        return ERROR$(err.message);
       })
-      .pipe(
-        map((response) => {
-          return SUCCESS(adaptMovie(response));
-        }),
-        catchError((err) => {
-          return ERROR$(err.message);
-        })
-      );
+    );
   }
 
   getMovieList$(): Observable<RequestState<Movie[]>> {
@@ -92,7 +106,7 @@ export class ImdbService {
   }
 
   getMovie$(id: string): Observable<RequestState<Movie>> {
-    return concat(LOADING$(), this.fetchMovie(id));
+    return concat(LOADING$(), this.fetchMovieDetailed(id));
   }
 
   setPhrase(phrase: string) {

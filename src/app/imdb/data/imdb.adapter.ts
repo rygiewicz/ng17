@@ -18,7 +18,24 @@ export function adaptMovie(data: any): Movie {
     title: String(data.title || ''),
     description: adaptDescription(data),
     imageUrl: adaptImageUrl(data),
+    synopsis: '',
   };
+}
+
+export function adaptMovieDetails(movieData: any, synopsisData: any): Movie {
+  const movie = adaptMovie(movieData);
+
+  movie.synopsis = adaptSynopsis(synopsisData);
+
+  return movie;
+}
+
+function adaptSynopsis(data: any): string {
+  if (!Array.isArray(data) || !data.length) {
+    return '';
+  }
+
+  return String(data[0].text || '');
 }
 
 function adaptId(data: any): string {

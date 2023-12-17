@@ -5,6 +5,7 @@ export interface Movie {
   title: string;
   description: string;
   imageUrl: string;
+  synopsis: string;
 }
 
 export interface RequestState<T> {
