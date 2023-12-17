@@ -14,6 +14,8 @@ function adaptMovie(data: any): Movie {
   data = data || {};
 
   return {
-    title: data.title,
+    id: String(data.id || ''),
+    title: String(data.title || ''),
+    description: `${data.titleType || ''} (${data.year || ''})`,
   };
 }

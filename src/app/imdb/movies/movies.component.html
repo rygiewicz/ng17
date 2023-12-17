@@ -1,3 +1,13 @@
 <app-spinner *ngIf="movies.loading" />
 <app-error *ngIf="movies.error" [message]="movies.error" />
-<div *ngIf="movies.data.length">{{JSON.stringify(movies.data)}}</div>
+<div *ngIf="movies.data.length" class="row row-cols-4 g-4">
+  <div class="col" *ngFor="let movie of movies.data; trackBy: trackMovies">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{movie.title}}</h5>
+        <p class="card-text">{{movie.description}}</p>
+        <a class="btn btn-primary" [routerLink]="['/imdb']">Explore</a>
+      </div>
+    </div>
+  </div>
+</div>

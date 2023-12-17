@@ -1,7 +1,9 @@
 import { Observable, of } from 'rxjs';
 
 export interface Movie {
+  id: string;
   title: string;
+  description: string;
 }
 
 export interface MovieListState {
