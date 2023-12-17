@@ -10,15 +10,23 @@ export function adaptMovieList(data: any): Movie[] {
   return data.results.map(adaptMovie);
 }
 
-function adaptMovie(data: any): Movie {
+export function adaptMovie(data: any): Movie {
   data = data || {};
 
   return {
-    id: String(data.id || ''),
+    id: adaptId(data),
     title: String(data.title || ''),
     description: adaptDescription(data),
     imageUrl: adaptImageUrl(data),
   };
+}
+
+function adaptId(data: any): string {
+  data = data || {};
+
+  const id = String(data.id || '');
+
+  return id.split('/').slice(2, 3).pop() || '';
 }
 
 function adaptDescription(data: any): string {

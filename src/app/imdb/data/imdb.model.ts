@@ -7,39 +7,50 @@ export interface Movie {
   imageUrl: string;
 }
 
-export interface MovieListState {
-  error: string;
-  data: Movie[];
+export interface RequestState<T = any> {
+  error?: string;
+  data?: T;
   loading: boolean;
 }
 
-export const MOVIES_EMPTY: MovieListState = {
-  error: '',
-  data: [],
-  loading: false,
-};
+export function EMPTY(): RequestState {
+  return {
+    loading: false,
+  };
+}
 
-export const MOVIES_LOADING: MovieListState = {
-  error: '',
-  data: [],
-  loading: true,
-};
+export function LOADING(): RequestState {
+  return {
+    loading: true,
+  };
+}
 
-export const MOVIES_ERROR = (error: string): MovieListState => ({
-  error,
-  data: [],
-  loading: false,
-});
+export function ERROR(error: string): RequestState {
+  return {
+    error,
+    loading: false,
+  };
+}
 
-export const MOVIES_SUCCESS = (data: Movie[]): MovieListState => ({
-  error: '',
-  data,
-  loading: false,
-});
+export function SUCCESS<T>(data: T): RequestState<T> {
+  return {
+    data,
+    loading: false,
+  };
+}
 
-export const MOVIES_EMPTY$: Observable<MovieListState> = of(MOVIES_EMPTY);
+export function EMPTY$(): Observable<RequestState> {
+  return of(EMPTY());
+}
 
-export const MOVIES_LOADING$: Observable<MovieListState> = of(MOVIES_LOADING);
+export function LOADING$(): Observable<RequestState> {
+  return of(LOADING());
+}
 
-export const MOVIES_ERROR$ = (error: string): Observable<MovieListState> =>
-  of(MOVIES_ERROR(error));
+export function ERROR$(error: string): Observable<RequestState> {
+  return of(ERROR(error));
+}
+
+export function SUCCESS$<T>(data: T): Observable<RequestState<T>> {
+  return of(SUCCESS(data));
+}
