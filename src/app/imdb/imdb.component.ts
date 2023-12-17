@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
 import { ImdbService } from './data/imdb.service';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { ErrorComponent } from '../error/error.component';
+import { SearchComponent } from './search/search.component';
 
 @Component({
   selector: 'app-imdb',
   standalone: true,
-  imports: [FormsModule, AsyncPipe, NgIf, SpinnerComponent, ErrorComponent],
+  imports: [AsyncPipe, NgIf, SpinnerComponent, ErrorComponent, SearchComponent],
   templateUrl: './imdb.component.html',
   styleUrl: './imdb.component.scss',
 })
@@ -17,9 +17,7 @@ export class ImdbComponent {
 
   JSON = JSON;
 
-  onSubmit(f: NgForm) {
-    const phrase = String(f.value.phrase || '');
-
+  onSearch(phrase: string) {
     this.imdbService.setPhrase(phrase);
   }
 }

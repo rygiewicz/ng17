@@ -1,16 +1,8 @@
-<div class="container">
-  <form class="row" novalidate #f="ngForm" (ngSubmit)="onSubmit(f)">
-    <div class="col">
-      <label for="imdbSearch1" class="form-label">Search IMDB</label>
-      <input name="phrase" ngModel type="text" autocomplete="off" class="form-control" id="imdbSearch1">
-    </div>
-    <div class="col-auto align-self-end">
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-  </form>
+<div class="container my-4">
+  <app-search (onSearch)="onSearch($event)" />
 </div>
-<div class="container" *ngIf="imdbService.getMovies$() | async as movies">
+<div class="container my-4" *ngIf="imdbService.getMovies$() | async as movies">
   <app-spinner *ngIf="movies.loading" />
   <app-error *ngIf="movies.error" [message]="movies.error" />
-  {{JSON.stringify(movies)}}
+  <div *ngIf="movies.data.length">{{JSON.stringify(movies.data)}}</div>
 </div>

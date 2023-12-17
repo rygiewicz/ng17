@@ -17,12 +17,15 @@ import {
   MOVIES_LOADING,
   MOVIES_SUCCESS,
 } from './imdb.model';
+import { adaptMovieList } from './imdb.adapter';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ImdbService {
   private baseUrl = 'https://imdb8.p.rapidapi.com';
+  private apiKey = '47f97e4a1bmshd08a28e43db5277p1980e7jsn9169248a05e2';
+
   private phrase$ = new BehaviorSubject('');
   private movieList$ = this.createMovieList$();
 
@@ -42,14 +45,25 @@ export class ImdbService {
   }
 
   private fetchMovies(phrase: string): Observable<MovieListState> {
-    return this.http.get(`${this.baseUrl}/title/v2/find`, {}).pipe(
-      map((response) => {
-        return MOVIES_SUCCESS([]);
-      }),
-      catchError((err) => {
-        return MOVIES_ERROR(err.message);
+    return this.http
+      .get(`${this.baseUrl}/title/v2/find`, {
+        params: {
+          title: phrase,
+          limit: '20',
+          sortArg: 'moviemeter,asc',
+        },
+        headers: {
+          'X-RapidAPI-Key': this.apiKey,
+        },
       })
-    );
+      .pipe(
+        map((response) => {
+          return MOVIES_SUCCESS(adaptMovieList(response));
+        }),
+        catchError((err) => {
+          return MOVIES_ERROR(err.message);
+        })
+      );
   }
 
   getMovies$(): Observable<MovieListState> {
