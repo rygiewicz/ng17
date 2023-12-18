@@ -5,16 +5,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, map } from 'rxjs';
 import { AutocompleteItem } from './data/search.model';
+import { RS_EMPTY, RequestState } from '../../request.model';
+import { SpinnerComponent } from '../../spinner/spinner.component';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [FormsModule, AsyncPipe, NgbDropdownModule, NgIf, NgFor, NgClass],
+  imports: [
+    FormsModule,
+    AsyncPipe,
+    NgbDropdownModule,
+    NgIf,
+    NgFor,
+    NgClass,
+    SpinnerComponent,
+  ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
 export class SearchComponent {
-  @Input() autocomplete: AutocompleteItem[] = [];
+  @Input() autocomplete: RequestState<AutocompleteItem[]> = RS_EMPTY();
   @Output() onSubmit: Observable<string>;
   @Output() onChange = new EventEmitter<string>();
 
@@ -32,5 +42,9 @@ export class SearchComponent {
     const phrase = String(f.value.phrase || '');
 
     this.router.navigate([], { queryParams: { p: phrase } });
+  }
+
+  noSuggestions() {
+    return !this.autocomplete.data?.length && !this.autocomplete.loading;
   }
 }

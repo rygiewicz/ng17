@@ -55,11 +55,19 @@ export class ImdbService {
     );
   }
 
-  private createAutocompleteList$(): Observable<AutocompleteItem[]> {
+  private createAutocompleteList$(): Observable<
+    RequestState<AutocompleteItem[]>
+  > {
     return this.autocompletePhrase$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((phrase) => this.fetchAutocomplete(phrase))
+      switchMap((phrase) => {
+        if (phrase.length < 3) {
+          return RS_EMPTY$();
+        }
+
+        return concat(RS_LOADING$(), this.fetchAutocomplete(phrase));
+      })
     );
   }
 
@@ -118,7 +126,9 @@ export class ImdbService {
     );
   }
 
-  private fetchAutocomplete(phrase: string): Observable<AutocompleteItem[]> {
+  private fetchAutocomplete(
+    phrase: string
+  ): Observable<RequestState<AutocompleteItem[]>> {
     return this.http
       .get(`${this.baseUrl}/auto-complete`, {
         params: {
@@ -129,12 +139,16 @@ export class ImdbService {
         },
       })
       .pipe(
-        map((response) => adaptAutocomplete(response)),
-        catchError(() => of([]))
+        map((response) => {
+          return RS_SUCCESS(adaptAutocomplete(response));
+        }),
+        catchError((err) => {
+          return RS_ERROR$(err.message);
+        })
       );
   }
 
-  getAutocompleteList$(): Observable<AutocompleteItem[]> {
+  getAutocompleteList$(): Observable<RequestState<AutocompleteItem[]>> {
     return this.autocompleteList$;
   }
 

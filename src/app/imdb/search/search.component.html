@@ -4,8 +4,9 @@
     <div ngbDropdown>
       <input name="phrase" [ngModel]="onSubmit | async" (ngModelChange)="onChange.emit($event)" type="text"
         autocomplete="off" class="form-control" id="imdbSearch1" ngbDropdownToggle>
-      <div ngbDropdownMenu aria-labelledby="imdbSearch1" [ngClass]="{'d-none': !autocomplete.length}">
-        <button ngbDropdownItem *ngFor="let item of autocomplete">{{item.title}}</button>
+      <div ngbDropdownMenu aria-labelledby="imdbSearch1" [ngClass]="{'d-none': noSuggestions()}">
+        <app-spinner *ngIf="autocomplete.loading" />
+        <button ngbDropdownItem *ngFor="let item of autocomplete.data">{{item.title}}</button>
       </div>
     </div>
   </div>
