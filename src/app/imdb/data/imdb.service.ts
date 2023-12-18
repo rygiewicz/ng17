@@ -12,14 +12,14 @@ import {
   of,
   switchMap,
 } from 'rxjs';
+import { Movie } from './imdb.model';
 import {
-  EMPTY$,
-  ERROR$,
-  LOADING$,
-  Movie,
+  RS_EMPTY$,
+  RS_ERROR$,
+  RS_LOADING$,
   RequestState,
-  SUCCESS,
-} from './imdb.model';
+  RS_SUCCESS,
+} from '../../request.model';
 import {
   adaptAutocomplete,
   adaptMovieDetails,
@@ -47,10 +47,10 @@ export class ImdbService {
       distinctUntilChanged(),
       switchMap((phrase) => {
         if (phrase.length < 3) {
-          return EMPTY$();
+          return RS_EMPTY$();
         }
 
-        return concat(LOADING$(), this.fetchMovieList(phrase));
+        return concat(RS_LOADING$(), this.fetchMovieList(phrase));
       })
     );
   }
@@ -77,10 +77,10 @@ export class ImdbService {
       })
       .pipe(
         map((response) => {
-          return SUCCESS(adaptMovieList(response));
+          return RS_SUCCESS(adaptMovieList(response));
         }),
         catchError((err) => {
-          return ERROR$(err.message);
+          return RS_ERROR$(err.message);
         })
       );
   }
@@ -110,10 +110,10 @@ export class ImdbService {
   private fetchMovieDetailed(id: string): Observable<RequestState<Movie>> {
     return combineLatest([this.fetchMovie(id), this.fetchSynopsis(id)]).pipe(
       map(([movieResponse, synopsisResponse]) => {
-        return SUCCESS(adaptMovieDetails(movieResponse, synopsisResponse));
+        return RS_SUCCESS(adaptMovieDetails(movieResponse, synopsisResponse));
       }),
       catchError((err) => {
-        return ERROR$(err.message);
+        return RS_ERROR$(err.message);
       })
     );
   }
@@ -143,7 +143,7 @@ export class ImdbService {
   }
 
   getMovie$(id: string): Observable<RequestState<Movie>> {
-    return concat(LOADING$(), this.fetchMovieDetailed(id));
+    return concat(RS_LOADING$(), this.fetchMovieDetailed(id));
   }
 
   setSearchPhrase(phrase: string) {

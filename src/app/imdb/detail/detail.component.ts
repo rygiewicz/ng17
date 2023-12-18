@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, switchMap } from 'rxjs';
-import { EMPTY$, Movie, RequestState } from '../data/imdb.model';
+import { Movie } from '../data/imdb.model';
+import { RS_EMPTY$, RequestState } from '../../request.model';
 import { ImdbService } from '../data/imdb.service';
 import { SpinnerComponent } from '../../spinner/spinner.component';
 import { ErrorComponent } from '../../error/error.component';
@@ -26,7 +27,7 @@ export class DetailComponent {
         const id = params.get('id');
 
         if (!id) {
-          return EMPTY$();
+          return RS_EMPTY$();
         }
 
         return imdbService.getMovie$(id);
