@@ -2,23 +2,23 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
     <div class="form-group my-4">
       <label for="exampleInputText1">Text input</label>
-      <input formControlName="text1" type="text" class="form-control" id="exampleInputText1"
+      <input formControlName="text1" type="text" [ngClass]="getNgClass('text1')" id=" exampleInputText1"
         placeholder="Enter some text" required>
     </div>
     <div class="form-group my-4">
       <label for="exactNameText1">Exact input</label>
-      <input formControlName="exact1" type="text" class="form-control" id="exactNameText1"
+      <input formControlName="exact1" type="text" [ngClass]="getNgClass('exact1')" id="exactNameText1"
         placeholder="Enter exact text" required>
     </div>
     <div class="form-group my-4">
       <label for="exampleInputEmail1">Email address</label>
-      <input formControlName="email1" type="email" class="form-control" id="exampleInputEmail1"
+      <input formControlName="email1" type="email" [ngClass]="getNgClass('email1')" id="exampleInputEmail1"
         aria-describedby="emailHelp" placeholder="Enter email" required>
       <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
     </div>
     <div class="form-group my-4">
       <label for="exampleInputPassword1">Password</label>
-      <input formControlName="password1" type="password" class="form-control" id="exampleInputPassword1"
+      <input formControlName="password1" type="password" [ngClass]="getNgClass('password1')" id="exampleInputPassword1"
         placeholder="Enter password" required>
     </div>
     <div class="form-group my-4">

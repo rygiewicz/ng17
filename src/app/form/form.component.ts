@@ -6,6 +6,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   ValidatorFn,
+  Validators,
 } from '@angular/forms';
 
 @Component({
@@ -18,13 +19,30 @@ import {
 export class FormComponent {
   form = new FormGroup({
     text1: new FormControl(''),
-    exact1: new FormControl('', exactName('Houdini')),
+    exact1: new FormControl('', [Validators.required, exactName('Houdini')]),
     email1: new FormControl(''),
     password1: new FormControl(''),
   });
 
   onSubmit() {
     console.log(this.form);
+  }
+
+  isInvalid(name: string): boolean {
+    const control = this.form.get(name);
+
+    if (!control) {
+      return false;
+    }
+
+    return control.touched && !!control.errors;
+  }
+
+  getNgClass(name: string) {
+    return {
+      'form-control': true,
+      'is-invalid': this.isInvalid(name),
+    };
   }
 }
 
