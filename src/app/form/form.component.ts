@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   AbstractControl,
@@ -12,7 +12,7 @@ import {
 @Component({
   selector: 'app-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, NgIf],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
 })
@@ -20,8 +20,11 @@ export class FormComponent {
   form = new FormGroup({
     text1: new FormControl(''),
     exact1: new FormControl('', [Validators.required, exactName('Houdini')]),
-    email1: new FormControl(''),
-    password1: new FormControl(''),
+    email1: new FormControl('', [Validators.required, Validators.email]),
+    password1: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
   });
 
   onSubmit() {
@@ -29,13 +32,7 @@ export class FormComponent {
   }
 
   isInvalid(name: string): boolean {
-    const control = this.form.get(name);
-
-    if (!control) {
-      return false;
-    }
-
-    return control.touched && !!control.errors;
+    return !!this.getError(name);
   }
 
   getNgClass(name: string) {
@@ -43,6 +40,31 @@ export class FormComponent {
       'form-control': true,
       'is-invalid': this.isInvalid(name),
     };
+  }
+
+  getError(name: string): string {
+    const control = this.form.get(name);
+
+    if (!control || !control.touched || !control.errors) {
+      return '';
+    }
+
+    if (control.errors['required']) {
+      return 'This field is required';
+    }
+
+    if (control.errors['email']) {
+      return 'Not a valid email';
+    }
+
+    if (control.errors['minlength']) {
+      return (
+        'Length must be at least ' +
+        control.errors['minlength']['requiredLength']
+      );
+    }
+
+    return Object.values(control.errors).pop() || 'Invalid';
   }
 }
 
