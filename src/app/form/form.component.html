@@ -12,9 +12,9 @@
       <label for="exactNameText1">Exact input</label>
       <input formControlName="exact1" type="text" [ngClass]="getNgClass('exact1')" id="exactNameText1"
         placeholder="Enter exact text" required>
-        <div *ngIf="isInvalid('exact1')" class="invalid-feedback">
-          {{getError('exact1')}}
-        </div>
+      <div *ngIf="isInvalid('exact1')" class="invalid-feedback">
+        {{getError('exact1')}}
+      </div>
     </div>
     <div class="form-group my-4">
       <label for="exampleInputEmail1">Email address</label>
@@ -29,14 +29,14 @@
       <label for="exampleInputPassword1">Password</label>
       <input formControlName="password1" type="password" [ngClass]="getNgClass('password1')" id="exampleInputPassword1"
         placeholder="Enter password" required>
-        <div *ngIf="isInvalid('password1')" class="invalid-feedback">
-          {{getError('password1')}}
-        </div>
+      <div *ngIf="isInvalid('password1')" class="invalid-feedback">
+        {{getError('password1')}}
+      </div>
     </div>
     <div class="form-group my-4" formGroupName="phoneInfo">
       <label for="exampleInputMobilePhone1">Mobile phone input</label>
-      <input formControlName="mobilePhone" type="text" [ngClass]="getNgClass('phoneInfo.mobilePhone')" id=" exampleInputMobilePhone1"
-        placeholder="Enter mobile phone no" required>
+      <input formControlName="mobilePhone" type="text" [ngClass]="getNgClass('phoneInfo.mobilePhone')"
+        id="exampleInputMobilePhone1" placeholder="Enter mobile phone no" required>
       <div *ngIf="isInvalid('phoneInfo.mobilePhone')" class="invalid-feedback">
         {{getError('phoneInfo.mobilePhone')}}
       </div>
@@ -45,4 +45,15 @@
       <button class="btn btn-primary" type=" submit">Submit</button>
     </div>
   </form>
+  <br />
+  <div>
+    <div class="form-group my-4">
+      <label for="exampleSeparateField1">Separate ngModel input</label>
+      <input [(ngModel)]="separateField" type="text" class="form-control" id="exampleSeparateField1"
+        placeholder="Enter some text">
+      <div>
+        {{separateField}}
+      </div>
+    </div>
+  </div>
 </div>

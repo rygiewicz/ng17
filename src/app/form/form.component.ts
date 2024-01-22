@@ -4,6 +4,7 @@ import {
   AbstractControl,
   FormControl,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   ValidatorFn,
   Validators,
@@ -12,7 +13,7 @@ import {
 @Component({
   selector: 'app-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgIf],
+  imports: [ReactiveFormsModule, NgClass, NgIf, FormsModule],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
 })
@@ -33,6 +34,8 @@ export class FormComponent {
       homePhone: new FormControl(''),
     }),
   });
+
+  separateField = '222222';
 
   onSubmit() {
     this.form.markAllAsTouched();
