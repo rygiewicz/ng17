@@ -25,9 +25,17 @@ export class FormComponent {
       Validators.required,
       Validators.minLength(8),
     ]),
+    phoneInfo: new FormGroup({
+      mobilePhone: new FormControl('', [
+        Validators.required,
+        Validators.minLength(7),
+      ]),
+      homePhone: new FormControl(''),
+    }),
   });
 
   onSubmit() {
+    this.form.markAllAsTouched();
     console.log(this.form);
   }
 

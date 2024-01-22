@@ -33,6 +33,14 @@
           {{getError('password1')}}
         </div>
     </div>
+    <div class="form-group my-4" formGroupName="phoneInfo">
+      <label for="exampleInputMobilePhone1">Mobile phone input</label>
+      <input formControlName="mobilePhone" type="text" [ngClass]="getNgClass('phoneInfo.mobilePhone')" id=" exampleInputMobilePhone1"
+        placeholder="Enter mobile phone no" required>
+      <div *ngIf="isInvalid('phoneInfo.mobilePhone')" class="invalid-feedback">
+        {{getError('phoneInfo.mobilePhone')}}
+      </div>
+    </div>
     <div class="form-group my-4">
       <button class="btn btn-primary" type=" submit">Submit</button>
     </div>
