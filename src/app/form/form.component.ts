@@ -9,11 +9,12 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { ExtraComponent } from './extra/extra.component';
 
 @Component({
   selector: 'app-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgIf, FormsModule],
+  imports: [ReactiveFormsModule, NgClass, NgIf, FormsModule, ExtraComponent],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
 })
@@ -31,11 +32,13 @@ export class FormComponent {
         Validators.required,
         Validators.minLength(7),
       ]),
-      homePhone: new FormControl(''),
+    }),
+    extraInfo: new FormGroup({
+      description: new FormControl('abc', [Validators.required]),
     }),
   });
 
-  separateField = '222222';
+  separateField = 'separate';
 
   onSubmit() {
     this.form.markAllAsTouched();
